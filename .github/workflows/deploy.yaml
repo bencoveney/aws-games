@@ -6,12 +6,10 @@ on:
 
 name: Deploy
 
-defaults:
-  runs-on: ubuntu-latest
-
 jobs:
   minecraft-container:
     name: Deploy Minecraft container to ECR
+    runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.image-tag.outputs.tag }}
       
@@ -46,6 +44,7 @@ jobs:
 
   minecraft-deploy:
     name: Deploy to AWS
+    runs-on: ubuntu-latest
     needs: minecraft-container
     steps:
     - name: Checkout
