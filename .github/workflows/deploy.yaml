@@ -39,7 +39,7 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       run: |
-        docker build -t ${{steps.image-tag.outputs.tag}} .
+        docker build -t ${{steps.image-tag.outputs.tag}} ./containers/minecraft
         docker push ${{steps.image-tag.outputs.tag}}
 
   minecraft-deploy:
