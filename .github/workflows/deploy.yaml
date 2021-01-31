@@ -14,6 +14,14 @@ on:
         description: 'AWS Region to deploy to'
         required: true
         default: 'eu-west-1'
+  push:
+    branches:
+      - main
+    inputs:
+      region:
+        description: 'AWS Region to deploy to'
+        required: true
+        default: 'eu-west-1'
 
 name: Deploy
 
