@@ -13,16 +13,15 @@ on:
       region:
         description: 'AWS Region to deploy to'
         required: true
-        default: 'us-east-1'
+        default: 'eu-west-1'
 
 name: Deploy
 
 jobs:
-  # Deploy the React app to AWS Amplify Console.
   # This job will run on every code change to the master branch, but will only deploy
   # changes if the infrastructure CloudFormation template in the repository changes.
   amplify:
-    name: Deploy to Amplify Console
+    name: Deploy to AWS
     runs-on: ubuntu-latest
     outputs:
       env-name: ${{ steps.env-name.outputs.environment }}
@@ -46,22 +45,13 @@ jobs:
         ENVIRONMENT=`echo $REPO | tr "/" "-"`
         echo "Environment name: $ENVIRONMENT"
         echo "::set-output name=environment::$ENVIRONMENT"
-    # - name: Deploy to Amplify Console with CloudFormation
-    #   id: amplify-stack
-    #   uses: aws-actions/aws-cloudformation-github-deploy@v1
-    #   with:
-    #     name: ${{ steps.env-name.outputs.environment }}
-    #     template: stack.yaml
-    #     no-fail-on-empty-changeset: "1"
-    #     parameter-overrides: >-
-    #       Name=${{ steps.env-name.outputs.environment }},
-    #       Repository=https://github.com/${{ github.repository }},
-    #       OauthToken=${{ secrets.AMPLIFY_TOKEN }},
-    #       Domain=${{ secrets.AMPLIFY_DOMAIN }}
-    # When a domain is configured to the stack,
-    # it gets configured in the environment and printed to the console.
-    # - name: Print default domain
-    #   env:
-    #     DefaultDomain: ${{ steps.amplify-stack.outputs.DefaultDomain }}
-    #   run: |
-    #     echo "Default Domain: $DefaultDomain"
+
+    - name: Deploy Minecraft server using CloudFormation
+      id: minecraft-server
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: ${{ steps.env-name.outputs.environment }}
+        template: stack.yaml
+        no-fail-on-empty-changeset: "1"
+        parameter-overrides: >-
+          Name=${{ steps.env-name.outputs.environment }}
