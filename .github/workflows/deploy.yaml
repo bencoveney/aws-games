@@ -8,7 +8,7 @@ name: Deploy
 
 jobs:
   minecraft-container:
-    name: Deploy Minecraft container to ECR
+    name: Build Minecraft container
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.image-tag.outputs.tag }}
@@ -43,7 +43,7 @@ jobs:
         docker push ${{steps.image-tag.outputs.tag}}
 
   minecraft-deploy:
-    name: Deploy to AWS
+    name: Deploy Minecraft to cloud
     runs-on: ubuntu-latest
     needs: minecraft-container
     steps:
@@ -59,15 +59,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-1
 
-    - name: Configure environment name
-      id: env-name
-      env:
-        REPO: ${{ github.repository }}
-      run: |
-        ENVIRONMENT=`echo $REPO | tr "/" "-"`
-        echo "Environment name: $ENVIRONMENT"
-        echo "::set-output name=environment::$ENVIRONMENT"
-
     - name: Deploy Minecraft server using CloudFormation
       id: minecraft-server
       uses: aws-actions/aws-cloudformation-github-deploy@v1
@@ -75,3 +66,6 @@ jobs:
         name: ${{ steps.env-name.outputs.environment }}
         template: stack.yaml
         no-fail-on-empty-changeset: "1"
+        parameter-overrides: >-
+          ServiceName=minecraft,
+          MinecraftImage=${{ needs.minecraft-container.outputs.tag }}

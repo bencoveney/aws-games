@@ -1,5 +1,36 @@
-AWSTemplateFormatVersion: 2010-09-09
-
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  ServiceName:
+    Type: String
+  MinecraftImage:
+    Type: String
 Resources:
-  HelloBucket:
-    Type: AWS::S3::Bucket
+  Cluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Join ['', [!Ref ServiceName, Cluster]]
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties: 
+      ContainerDefinitions: 
+        - Essential: true
+          Image: "repository-url/image:tag"
+          MountPoints: 
+            - MountPoint
+          Name: !Ref ServiceName
+          # Send logs to CloudWatch Logs
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref AWS::Region
+              awslogs-group: !Ref LogGroup
+              awslogs-stream-prefix: ecs
+      Cpu: "1024"
+      Memory: "4096"
+      NetworkMode: "awsvpc"
+      RequiresCompatibilities:
+        - "FARGATE"
+      Volumes: 
+        - EFSVolumeConfiguration
+
+
