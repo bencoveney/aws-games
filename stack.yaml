@@ -32,5 +32,3 @@ Resources:
         - "FARGATE"
       Volumes: 
         - EFSVolumeConfiguration
-
-

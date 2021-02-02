@@ -9,10 +9,11 @@ RUN apt-get install -y curl \
   && apt-get install -y nodejs \
   && curl -L https://www.npmjs.com/install.sh | sh \
   && nodejs -v \
-  && npm -v \
-  && npm install minecraft-wrap
+  && npm -v
 
 WORKDIR /minecraft
+
+RUN npm install minecraft-wrap
 
 COPY ./server.properties /server.properties
 COPY ./eula.txt /eula.txt
