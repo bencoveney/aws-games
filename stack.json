@@ -1,0 +1,111 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "ServiceName": {
+            "Type": "String"
+        },
+        "MinecraftImage": {
+            "Type": "String"
+        },
+        "ContainerPort": {
+            "Type": "Number",
+            "Default": 25565
+        }
+    },
+    "Resources": {
+        "Cluster": {
+            "Type": "AWS::ECS::Cluster",
+            "Properties": {
+                "ClusterName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "ServiceName"
+                            },
+                            "Cluster"
+                        ]
+                    ]
+                }
+            }
+        },
+        "TaskDefinition": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "DependsOn": "LogGroup",
+            "Properties": {
+                "Family": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "ServiceName"
+                            },
+                            "TaskDefinition"
+                        ]
+                    ]
+                },
+                "ContainerDefinitions": [
+                    {
+                        "Essential": true,
+                        "Image": "repository-url/image:tag",
+                        "MountPoints": [
+                            {
+                                "SourceVolume": "minecraft-efs-volume",
+                                "ContainerPath": "/minecraft",
+                                "ReadOnly": false
+                            }
+                        ],
+                        "Name": {
+                            "Ref": "ServiceName"
+                        },
+                        "LogConfiguration": {
+                            "LogDriver": "awslogs",
+                            "Options": {
+                                "awslogs-region": {
+                                    "Ref": "AWS::Region"
+                                },
+                                "awslogs-group": {
+                                    "Ref": "LogGroup"
+                                },
+                                "awslogs-stream-prefix": "ecs"
+                            }
+                        }
+                    }
+                ],
+                "Cpu": "1024",
+                "Memory": "4096",
+                "NetworkMode": "awsvpc",
+                "RequiresCompatibilities": [
+                    "FARGATE"
+                ],
+                "Volumes": [
+                    {
+                        "Name": "minecraft-efs-volume",
+                        "EfsVolumeConfiguration": [
+                            {
+                                "FileSystemId": "minecraft-file-system"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "LogGroupName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "/ecs/",
+                            {
+                                "Ref": "ServiceName"
+                            },
+                            "TaskDefinition"
+                        ]
+                    ]
+                }
+            }
+        }
+    }
+}
