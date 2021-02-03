@@ -4,6 +4,9 @@ Parameters:
     Type: String
   MinecraftImage:
     Type: String
+  ContainerPort:
+    Type: Number
+    Default: 25565
 Resources:
   Cluster:
     Type: AWS::ECS::Cluster
@@ -18,7 +21,9 @@ Resources:
         - Essential: true
           Image: "repository-url/image:tag"
           MountPoints: 
-            - MountPoint
+            - SourceVolume: minecraft-efs-volume
+              ContainerPath: /minecraft
+              ReadOnly: false
           Name: !Ref ServiceName
           # Send logs to CloudWatch Logs
           LogConfiguration:
@@ -33,7 +38,9 @@ Resources:
       RequiresCompatibilities:
         - "FARGATE"
       Volumes: 
-        - EFSVolumeConfiguration
+        - Name: minecraft-efs-volume
+          EfsVolumeConfiguration:
+            - FileSystemId: minecraft-file-system
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
