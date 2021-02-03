@@ -11,7 +11,9 @@ Resources:
       ClusterName: !Join ['', [!Ref ServiceName, Cluster]]
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
+    DependsOn: LogGroup
     Properties: 
+      Family: !Join ['', [!Ref ServiceName, TaskDefinition]]
       ContainerDefinitions: 
         - Essential: true
           Image: "repository-url/image:tag"
@@ -32,3 +34,7 @@ Resources:
         - "FARGATE"
       Volumes: 
         - EFSVolumeConfiguration
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ['', [/ecs/, !Ref ServiceName, TaskDefinition]]
