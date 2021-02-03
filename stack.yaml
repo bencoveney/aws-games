@@ -18,12 +18,12 @@ Resources:
     Properties: 
       Family: !Join ['', [!Ref ServiceName, TaskDefinition]]
       ContainerDefinitions: 
-        - Essential: yes
+        - Essential: true
           Image: "repository-url/image:tag"
           MountPoints: 
             - SourceVolume: minecraft-efs-volume
               ContainerPath: /minecraft
-              ReadOnly: no
+              ReadOnly: false
           Name: !Ref ServiceName
           # Send logs to CloudWatch Logs
           LogConfiguration:
