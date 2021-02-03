@@ -7,45 +7,9 @@ on:
 name: Deploy
 
 jobs:
-  minecraft-container:
-    name: Build Minecraft container
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.image-tag.outputs.tag }}
-      
-    steps:
-    - name: Checkout
-      id: checkout
-      uses: actions/checkout@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-1
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Generate image tag
-      id: image-tag
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: minecraft
-        IMAGE_TAG: ${{ github.sha }}
-      run: echo "::set-output name=tag::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-    - name: Build, tag, and push image to Amazon ECR
-      run: |
-        docker build -t ${{steps.image-tag.outputs.tag}} ./containers/minecraft
-        docker push ${{steps.image-tag.outputs.tag}}
-
-  minecraft-deploy:
+  deploy:
     name: Deploy Minecraft to cloud
     runs-on: ubuntu-latest
-    needs: minecraft-container
     steps:
     - name: Checkout
       id: checkout
@@ -58,6 +22,23 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Generate image tag
+      id: imagetag
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: minecraft
+        IMAGE_TAG: ${{ github.sha }}
+      run: echo "::set-output name=tag::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Build, tag, and push image to Amazon ECR
+      run: |
+        docker build -t ${{steps.imagetag.outputs.tag}} ./containers/minecraft
+        docker push ${{steps.imagetag.outputs.tag}}
 
     - name: Configure environment name
       id: env-name
@@ -77,4 +58,4 @@ jobs:
         no-fail-on-empty-changeset: "1"
         parameter-overrides: >-
           ServiceName=minecraft,
-          MinecraftImage=${{ needs.minecraft-container.outputs.tag }}
+          MinecraftImage=${{ steps.imagetag.outputs.tag }}
