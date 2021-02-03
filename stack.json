@@ -47,7 +47,9 @@
                 "ContainerDefinitions": [
                     {
                         "Essential": true,
-                        "Image": "repository-url/image:tag",
+                        "Image": {
+                            "Ref": "MinecraftImage"
+                        },
                         "MountPoints": [
                             {
                                 "SourceVolume": "minecraft-efs-volume",
