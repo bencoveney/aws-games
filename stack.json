@@ -35,7 +35,13 @@
                 "ContainerDefinitions": [
                     {
                         "Image": "busybox",
-                        "Name": "busybox"
+                        "Name": "busybox",
+                        "mountPoints": [
+                            {
+                                "sourceVolume": "minecraft-efs-volume",
+                                "readOnly": true
+                            }
+                        ]
                     }
                 ],
                 "Cpu": "1024",
@@ -53,12 +59,12 @@
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
                 "RequiresCompatibilities": ["FARGATE"],
-                "Volumes": [
+                "volumes": [
                     {
-                        "Name": "minecraft-efs-volume",
-                        "EfsVolumeConfiguration": [
+                        "name": "minecraft-efs-volume",
+                        "efsVolumeConfiguration": [
                             {
-                                "FilesystemId": "minecraft-file-system"
+                                "fileSystemId": "minecraft-file-system"
                             }
                         ]
                     }
