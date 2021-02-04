@@ -29,67 +29,6 @@
                 }
             }
         },
-        "TaskDefinition": {
-            "Type": "AWS::ECS::TaskDefinition",
-            "DependsOn": "LogGroup",
-            "Properties": {
-                "ContainerDefinitions": [
-                    {
-                        "Image": {
-                            "Ref": "MinecraftImage"
-                        },
-                        "LogConfiguration": {
-                            "LogDriver": "awslogs",
-                            "Options": {
-                                "awslogs-region": {
-                                    "Ref": "AWS::Region"
-                                },
-                                "awslogs-group": {
-                                    "Ref": "LogGroup"
-                                },
-                                "awslogs-stream-prefix": "ecs"
-                            }
-                        },
-                        "MountPoints": [
-                            {
-                                "ContainerPath": "/minecraft",
-                                "SourceVolume": "minecraft-efs-volume"
-                            }
-                        ],
-                        "Name": {
-                            "Ref": "ServiceName"
-                        }
-                    }
-                ],
-                "Cpu": "1024",
-                "Family": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            {
-                                "Ref": "ServiceName"
-                            },
-                            "TaskDefinition"
-                        ]
-                    ]
-                },
-                "Memory": "4096",
-                "NetworkMode": "awsvpc",
-                "RequiresCompatibilities": [
-                    "FARGATE"
-                ],
-                "Volumes": [
-                    {
-                        "Name": "minecraft-efs-volume",
-                        "EfsVolumeConfiguration": [
-                            {
-                                "FilesystemId": "minecraft-file-system"
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
         "LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
