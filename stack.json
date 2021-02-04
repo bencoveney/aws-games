@@ -29,6 +29,32 @@
                 }
             }
         },
+        "TaskDefinition": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+                "ContainerDefinitions": [
+                    {
+                        "Image": "busybox",
+                        "Name": "busybox"
+                    }
+                ],
+                "Cpu": "1024",
+                "Family": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "ServiceName"
+                            },
+                            "EcsTaskDefinition"
+                        ]
+                    ]
+                },
+                "Memory": "4096",
+                "NetworkMode": "awsvpc",
+                "RequiresCompatibilities": ["FARGATE"]
+            }
+        },
         "LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
