@@ -33,32 +33,11 @@
             "Type": "AWS::ECS::TaskDefinition",
             "DependsOn": "LogGroup",
             "Properties": {
-                "Family": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            {
-                                "Ref": "ServiceName"
-                            },
-                            "TaskDefinition"
-                        ]
-                    ]
-                },
                 "ContainerDefinitions": [
                     {
                         "Essential": true,
                         "Image": {
                             "Ref": "MinecraftImage"
-                        },
-                        "MountPoints": [
-                            {
-                                "SourceVolume": "minecraft-efs-volume",
-                                "ContainerPath": "/minecraft",
-                                "ReadOnly": false
-                            }
-                        ],
-                        "Name": {
-                            "Ref": "ServiceName"
                         },
                         "LogConfiguration": {
                             "LogDriver": "awslogs",
@@ -71,10 +50,30 @@
                                 },
                                 "awslogs-stream-prefix": "ecs"
                             }
+                        },
+                        "MountPoints": [
+                            {
+                                "ContainerPath": "/minecraft",
+                                "SourceVolume": "minecraft-efs-volume"
+                            }
+                        ],
+                        "Name": {
+                            "Ref": "ServiceName"
                         }
                     }
                 ],
                 "Cpu": "1024",
+                "Family": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "ServiceName"
+                            },
+                            "TaskDefinition"
+                        ]
+                    ]
+                },
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
                 "RequiresCompatibilities": [
@@ -85,7 +84,7 @@
                         "Name": "minecraft-efs-volume",
                         "EfsVolumeConfiguration": [
                             {
-                                "FileSystemId": "minecraft-file-system"
+                                "FilesystemId": "minecraft-file-system"
                             }
                         ]
                     }
