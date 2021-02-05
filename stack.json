@@ -71,17 +71,7 @@
                 },
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
-                "RequiresCompatibilities": ["FARGATE"],
-                "Volumes": [
-                    {
-                        "Name": "minecraft-efs-volume",
-                        "EfsVolumeConfiguration": [
-                            {
-                                "FilesystemId": "minecraft-file-system"
-                            }
-                        ]
-                    }
-                ]
+                "RequiresCompatibilities": ["FARGATE"]
             }
         },
         "LogGroup": {
@@ -118,6 +108,12 @@
                 "ManagedPolicyArns": [
                     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
                 ]
+            }
+        },
+        "UnusedFileSystem": {
+            "Type": "AWS::EFS::FileSystem",
+            "Properties": {
+                "PerformanceMode": "generalPurpose"
             }
         }
     }
