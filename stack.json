@@ -34,8 +34,12 @@
             "Properties": {
                 "ContainerDefinitions": [
                     {
-                        "Image": "busybox",
-                        "Name": "busybox"
+                        "Image": {
+                            "Ref": "MinecraftImage"
+                        },
+                        "Name": {
+                            "Ref": "ServiceName"
+                        }
                     }
                 ],
                 "Cpu": "1024",
