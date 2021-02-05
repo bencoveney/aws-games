@@ -43,9 +43,6 @@
                     }
                 ],
                 "Cpu": "1024",
-                "ExecutionRoleArn": {
-                    "Ref": "ExecutionRole"
-                },
                 "Family": {
                     "Fn::Join": [
                         "",
@@ -77,25 +74,6 @@
                         ]
                     ]
                 }
-            }
-        },
-        "ExecutionRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-                "AssumeRolePolicyDocument": {
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Principal": {
-                                "Service": "ecs-tasks.amazonaws.com"
-                            },
-                            "Action": "sts:AssumeRole"
-                        }
-                    ]
-                },
-                "ManagedPolicyArns": [
-                    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-                ]
             }
         }
     }
