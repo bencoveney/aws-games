@@ -15,3 +15,7 @@ docker build -t minecraft .\containers\minecraft\ ; docker run -t -p 127.0.0.1:2
 ```
 
 https://github.com/1Strategy/fargate-cloudformation-example/blob/master/fargate.yaml
+
+https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_ECS.html
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html
+https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html
