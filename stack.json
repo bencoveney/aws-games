@@ -71,7 +71,17 @@
                 },
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
-                "RequiresCompatibilities": ["FARGATE"]
+                "RequiresCompatibilities": ["FARGATE"],
+                "Volumes": [
+                    {
+                        "Name": "minecraft-efs-volume",
+                        "EfsVolumeConfiguration": [
+                            {
+                                "FilesystemId": "minecraft-file-system"
+                            }
+                        ]
+                    }
+                ]
             }
         },
         "LogGroup": {
