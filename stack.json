@@ -117,6 +117,7 @@
             }
         },
         "Service": {
+            "Type": "AWS::ECS::Service",
             "Properties": {
                 "ServiceName": { "Ref": "ServiceName" },
                 "Cluster": { "Ref": "Cluster" },
