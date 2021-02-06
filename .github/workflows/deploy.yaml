@@ -29,8 +29,8 @@ jobs:
         REPO: ${{ github.repository }}
       run: |
         ENVIRONMENT=`echo $REPO | tr "/" "-"`
-        echo "Environment name: $ENVIRONMENT"
-        echo "::set-output name=environment::$ENVIRONMENT"
+        echo "Environment name: $ENVIRONMENT-infrastructure"
+        echo "::set-output name=environment::$ENVIRONMENT-infrastructure"
 
     - name: Deploy infractructure using CloudFormation
       id: minecraft-server
@@ -82,8 +82,8 @@ jobs:
         REPO: ${{ github.repository }}
       run: |
         ENVIRONMENT=`echo $REPO | tr "/" "-"`
-        echo "Environment name: $ENVIRONMENT"
-        echo "::set-output name=environment::$ENVIRONMENT"
+        echo "Environment name: $ENVIRONMENT-minecraft"
+        echo "::set-output name=environment::$ENVIRONMENT-minecraft"
 
     - name: Deploy Minecraft server using CloudFormation
       id: minecraft-server
