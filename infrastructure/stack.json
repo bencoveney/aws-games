@@ -10,15 +10,25 @@
             "Type": "String",
             "Default": "10.0.0.0/16"
         },
-        "Subnet1CIDR": {
+        "PublicSubnet1CIDR": {
             "Description": "Enter the CIDR Range for your VPC",
             "Type": "String",
-            "Default": "10.0.1.0/24"
+            "Default": "10.0.10.0/24"
         },
-        "Subnet2CIDR": {
+        "PublicSubnet2CIDR": {
             "Description": "Enter the CIDR Range for your VPC",
             "Type": "String",
-            "Default": "10.0.2.0/24"
+            "Default": "10.0.11.0/24"
+        },
+        "PrivateSubnet1CIDR": {
+            "Description": "Enter the CIDR Range for your VPC",
+            "Type": "String",
+            "Default": "10.0.20.0/24"
+        },
+        "PrivateSubnet2CIDR": {
+            "Description": "Enter the CIDR Range for your VPC",
+            "Type": "String",
+            "Default": "10.0.21.0/24"
         }
     },
     "Resources": {
@@ -64,7 +74,7 @@
                 }
             }
         },
-        "Subnet1": {
+        "PublicSubnet1": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
@@ -72,7 +82,7 @@
                 },
                 "MapPublicIpOnLaunch": true,
                 "CidrBlock": {
-                    "Ref": "Subnet1CIDR"
+                    "Ref": "PublicSubnet1CIDR"
                 },
                 "AvailabilityZone": {
                     "Fn::Select": [
@@ -86,7 +96,7 @@
                 }
             }
         },
-        "Subnet2": {
+        "PublicSubnet2": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
@@ -94,7 +104,7 @@
                 },
                 "MapPublicIpOnLaunch": true,
                 "CidrBlock": {
-                    "Ref": "Subnet2CIDR"
+                    "Ref": "PublicSubnet2CIDR"
                 },
                 "AvailabilityZone": {
                     "Fn::Select": [
@@ -105,6 +115,86 @@
                             }
                         }
                     ]
+                }
+            }
+        },
+        "PrivateSubnet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "MapPublicIpOnLaunch": false,
+                "CidrBlock": {
+                    "Ref": "PrivateSubnet1CIDR"
+                },
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "0",
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "PrivateSubnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "MapPublicIpOnLaunch": false,
+                "CidrBlock": {
+                    "Ref": "PrivateSubnet2CIDR"
+                },
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "1",
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "NatGateway1EIP": {
+            "Type": "AWS::EC2::EIP",
+            "DependsOn": "InternetGatewayAttachment",
+            "Properties": {
+                "Domain": "vpc"
+            }
+        },
+        "NatGateway2EIP": {
+            "Type": "AWS::EC2::EIP",
+            "DependsOn": "InternetGatewayAttachment",
+            "Properties": {
+                "Domain": "vpc"
+            }
+        },
+        "NatGateway1": {
+            "Type": "AWS::EC2::NatGateway",
+            "Properties": {
+                "AllocationId": {
+                    "Fn::GetAtt": ["NatGateway1EIP", "AllocationId"]
+                },
+                "SubnetId": {
+                    "Ref": "PublicSubnet1"
+                }
+            }
+        },
+        "NatGateway2": {
+            "Type": "AWS::EC2::NatGateway",
+            "Properties": {
+                "AllocationId": {
+                    "Fn::GetAtt": ["NatGateway2EIP", "AllocationId"]
+                },
+                "SubnetId": {
+                    "Ref": "PublicSubnet2"
                 }
             }
         }
