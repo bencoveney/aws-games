@@ -19,3 +19,8 @@ https://github.com/1Strategy/fargate-cloudformation-example/blob/master/fargate.
 https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_ECS.html
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html
 https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html
+https://raw.githubusercontent.com/awslabs/amazon-ecs-amazon-efs/master/amazon-efs-ecs.json
+
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html
+https://github.com/aws-samples/aws-cloudformation-starter-workflow-for-github-actions/blob/master/.github/workflows/deploy.yml
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/walkthrough-crossstackref.html

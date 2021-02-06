@@ -37,7 +37,7 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       run: |
-        docker build -t ${{steps.imagetag.outputs.tag}} ./containers/minecraft
+        docker build -t ${{steps.imagetag.outputs.tag}} ./minecraft
         docker push ${{steps.imagetag.outputs.tag}}
 
     - name: Configure environment name
@@ -54,7 +54,7 @@ jobs:
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
         name: ${{ steps.env-name.outputs.environment }}
-        template: stack.json
+        template: minecraft/stack.json
         no-fail-on-empty-changeset: "1"
         parameter-overrides: >-
           ServiceName=minecraft,
