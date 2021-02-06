@@ -124,7 +124,7 @@
                     "AwsvpcConfiguration": {
                         "AssignPublicIp": "ENABLED",
                         "Subnets": [
-                            {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet1"}}
+                            {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet1"}},
                             {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet2"}}
                         ],
                         "SecurityGroups": {
