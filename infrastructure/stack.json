@@ -9,6 +9,16 @@
             "Description": "IP range (CIDR notation) for this VPC",
             "Type": "String",
             "Default": "10.0.0.0/16"
+        },
+        "Subnet1CIDR": {
+            "Description": "Enter the CIDR Range for your VPC",
+            "Type": "String",
+            "Default": "10.0.1.0/24"
+        },
+        "Subnet2CIDR": {
+            "Description": "Enter the CIDR Range for your VPC",
+            "Type": "String",
+            "Default": "10.0.2.0/24"
         }
     },
     "Resources": {
@@ -51,6 +61,50 @@
                 },
                 "VpcId": {
                     "Ref": "VPC"
+                }
+            }
+        },
+        "Subnet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "MapPublicIpOnLaunch": true,
+                "CidrBlock": {
+                    "Ref": "Subnet1CIDR"
+                },
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "0",
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "Subnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "MapPublicIpOnLaunch": true,
+                "CidrBlock": {
+                    "Ref": "Subnet2CIDR"
+                },
+                "AvailabilityZone": {
+                    "Fn::Select": [
+                        "1",
+                        {
+                            "Fn::GetAZs": {
+                                "Ref": "AWS::Region"
+                            }
+                        }
+                    ]
                 }
             }
         }
