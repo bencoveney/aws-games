@@ -127,9 +127,11 @@
                             {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet1"}},
                             {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet2"}}
                         ],
-                        "SecurityGroups": {
-                            "Ref": "ContainerSecurityGroup"
-                        }
+                        "SecurityGroups": [
+                            {
+                                "Ref": "ContainerSecurityGroup"
+                            }
+                        ]
                     }
                 }
             }
