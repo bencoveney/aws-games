@@ -272,7 +272,7 @@
                     "Ref": "PrivateRouteTable1"
                 },
                 "DestinationCidrBlock": "0.0.0.0/0",
-                "GatewayId": {
+                "NatGatewayId": {
                     "Ref": "NatGateway1"
                 }
             }
@@ -311,7 +311,7 @@
                     "Ref": "PrivateRouteTable2"
                 },
                 "DestinationCidrBlock": "0.0.0.0/0",
-                "GatewayId": {
+                "NatGatewayId": {
                     "Ref": "NatGateway2"
                 }
             }
