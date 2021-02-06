@@ -1,17 +1,24 @@
 #!/usr/bin/env nodejs
 
+function log(message) {
+    console.log(`${__filename} ${message}`);
+}
+
+log(`__dirname: ${__dirname}`);
+
 const path = require('path');
 const fs = require('fs');
+
+fs.readdirSync(__dirname).forEach(file => {
+    log(file);
+});
+
 const wrap = require('minecraft-wrap');
 
 // https://launchermeta.mojang.com/mc/game/version_manifest.json
 const version = "1.16.5";
 const jarFile = path.resolve(`server.jar`);
 const serverDir = path.resolve(".");
-
-function log(message) {
-    console.log(`${__filename} ${message}`);
-}
 
 function copyFile(from, to) {
     from = path.resolve(from);
@@ -79,6 +86,7 @@ copyFile("/server.properties", "server.properties")
     .catch((err) => {
         console.log(err);
         setTimeout(() => {
+
             console.log(err);
             process.exit();
         }, 100000)
