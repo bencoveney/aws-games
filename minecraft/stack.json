@@ -115,15 +115,6 @@
             "Properties": {
                 "PerformanceMode": "generalPurpose"
             }
-        },
-        "Service": {
-            "Type": "AWS::ECS::Service",
-            "Properties": {
-                "ServiceName": { "Ref": "ServiceName" },
-                "Cluster": { "Ref": "Cluster" },
-                "TaskDefinition": { "Ref": "TaskDefinition" },
-                "LaunchType": "FARGATE"
-            }
         }
     }
 }

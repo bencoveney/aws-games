@@ -1,0 +1,27 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "EnvironmentName": {
+            "Description": "An environment name that is prefixed to resource names",
+            "Type": "String"
+        },
+        "VpcCIDR": {
+            "Description": "IP range (CIDR notation) for this VPC",
+            "Type": "String",
+            "Default": "10.0.0.0/16"
+        }
+    },
+    "Resources": {
+        "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "CIDRVPC"
+                },
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true
+            }
+        }
+    }
+}
+

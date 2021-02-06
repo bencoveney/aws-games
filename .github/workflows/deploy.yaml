@@ -7,9 +7,45 @@ on:
 name: Deploy
 
 jobs:
-  deploy:
+  deploy-infrastructure:
+    name: Deploy infrastructure to cloud
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      id: checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      id: creds
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+
+    - name: Configure environment name
+      id: env-name
+      env:
+        REPO: ${{ github.repository }}
+      run: |
+        ENVIRONMENT=`echo $REPO | tr "/" "-"`
+        echo "Environment name: $ENVIRONMENT"
+        echo "::set-output name=environment::$ENVIRONMENT"
+
+    - name: Deploy infractructure using CloudFormation
+      id: minecraft-server
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: ${{ steps.env-name.outputs.environment }}
+        template: infrastructure/stack.json
+        no-fail-on-empty-changeset: "1"
+        parameter-overrides: >-
+          EnvironmentName=${{ steps.env-name.outputs.environment }}
+
+  deploy-minecraft:
     name: Deploy Minecraft to cloud
     runs-on: ubuntu-latest
+    needs: deploy-infrastructure
     steps:
     - name: Checkout
       id: checkout
