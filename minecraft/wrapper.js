@@ -78,5 +78,8 @@ copyFile("/server.properties", "server.properties")
     .then(run)
     .catch((err) => {
         console.log(err);
-        process.exit();
+        setTimeout(() => {
+            console.log(err);
+            process.exit();
+        }, 100000)
     });
