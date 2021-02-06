@@ -10,6 +10,9 @@
         "ContainerPort": {
             "Type": "Number",
             "Default": 25565
+        },
+        "InfrastructureStackName": {
+            "Type": "String"
         }
     },
     "Resources": {
@@ -108,6 +111,43 @@
                 "ManagedPolicyArns": [
                     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
                 ]
+            }
+        },
+        "Service": {
+            "Type": "AWS::ECS::Service",
+            "Properties": {
+                "ServiceName": { "Ref": "ServiceName" },
+                "Cluster": { "Ref": "Cluster" },
+                "TaskDefinition": { "Ref": "TaskDefinition" },
+                "LaunchType": "FARGATE",
+                "NetworkConfiguration": {
+                    "AwsvpcConfiguration": {
+                        "AssignPublicIp": "ENABLED",
+                        "Subnets": [
+
+                        ],
+                        "SecurityGroups": {
+                            "Ref": "ContainerSecurityGroup"
+                        }
+                    }
+                }
+            }
+        },
+        "ContainerSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "ServiceName"
+                            },
+                            "ContainerSecurityGroup"
+                        ]
+                    ]
+                },
+                "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
             }
         },
         "UnusedFileSystem": {
