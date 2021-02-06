@@ -10,6 +10,8 @@ jobs:
   deploy-infrastructure:
     name: Deploy infrastructure to cloud
     runs-on: ubuntu-latest
+    outputs:
+      stack-name: ${{ steps.env-name.outputs.environment }}
     steps:
     - name: Checkout
       id: checkout
@@ -95,4 +97,5 @@ jobs:
         no-fail-on-empty-changeset: "1"
         parameter-overrides: >-
           ServiceName=minecraft,
-          MinecraftImage=${{ steps.imagetag.outputs.tag }}
+          MinecraftImage=${{ steps.imagetag.outputs.tag }},
+          InfrastructureStackName=${{ needs.deploy-infrastructure.outputs.stack-name }}
