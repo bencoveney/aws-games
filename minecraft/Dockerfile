@@ -17,11 +17,11 @@ WORKDIR /minecraft
 
 RUN npm install minecraft-wrap
 
-COPY ./server.properties /server.properties
-COPY ./eula.txt /eula.txt
-COPY ./wrapper.js /wrapper.js
-RUN chmod +x /wrapper.js
+COPY ./server.properties ./server.properties
+COPY ./eula.txt ./eula.txt
+COPY ./wrapper.js ./wrapper.js
+RUN chmod +x ./wrapper.js
 
 EXPOSE 25565 25575
 
-ENTRYPOINT ["/wrapper.js"]
+ENTRYPOINT ["./wrapper.js"]

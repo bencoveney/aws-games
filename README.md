@@ -11,7 +11,7 @@ Add Games user to group with:
 - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
 ```bash
-docker build -t minecraft .\containers\minecraft\ ; docker run -t -p 127.0.0.1:25565:25565 --name mc-test -d minecraft
+docker build -t minecraft .\minecraft\ ; docker run -t -p 127.0.0.1:25565:25565 --name mc-test -d minecraft
 ```
 
 https://github.com/1Strategy/fargate-cloudformation-example/blob/master/fargate.yaml
