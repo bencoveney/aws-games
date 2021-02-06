@@ -39,6 +39,7 @@ jobs:
         name: ${{ steps.env-name.outputs.environment }}
         template: infrastructure/stack.json
         no-fail-on-empty-changeset: "1"
+        role-arn: arn:aws:iam::${{ steps.creds.outputs.aws-account-id }}:role/github-actions-infrastructure-stack-role
         parameter-overrides: >-
           EnvironmentName=${{ steps.env-name.outputs.environment }}
 
