@@ -24,3 +24,10 @@ https://raw.githubusercontent.com/awslabs/amazon-ecs-amazon-efs/master/amazon-ef
 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html
 https://github.com/aws-samples/aws-cloudformation-starter-workflow-for-github-actions/blob/master/.github/workflows/deploy.yml
 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/walkthrough-crossstackref.html
+
+https://docs.aws.amazon.com/codebuild/latest/userguide/cloudformation-vpc-template.html
+https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html
+https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenario2.html
+https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html
+https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html
+https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
