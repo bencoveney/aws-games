@@ -106,22 +106,6 @@
                         "FromPort": 25565,
                         "ToPort": 25565,
                         "IpProtocol": "tcp",
-                        "SourceSecurityGroupId": {"Ref": "LoadBalancerSecurityGroup"}
-                    }
-                ],
-                "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
-            }
-        },
-        "LoadBalancerSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupName": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancerSecurityGroup"]]},
-                "GroupDescription": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancerSecurityGroup"]]},
-                "SecurityGroupIngress": [
-                    {
-                        "FromPort": 25565,
-                        "ToPort": 25565,
-                        "IpProtocol": "tcp",
                         "CidrIp": "0.0.0.0/0"
                     }
                 ],
@@ -157,9 +141,6 @@
           "Properties": {
                 "Name": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancer"]]},
                 "Scheme": "internet-facing",
-                "SecurityGroups": [
-                    {"Ref": "LoadBalancerSecurityGroup"}
-                ],
                 "Type": "network",
                 "Subnets": [
                     {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet1"}},
