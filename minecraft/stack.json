@@ -104,7 +104,7 @@
                 ],
                 "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
             }
-        }
+        },
         "UnusedFileSystem": {
             "Type": "AWS::EFS::FileSystem",
             "Properties": {
