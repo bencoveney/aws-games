@@ -15,6 +15,7 @@ docker build -t minecraft .\minecraft\ ; docker run -t -p 127.0.0.1:25565:25565 
 ```
 
 https://github.com/1Strategy/fargate-cloudformation-example/blob/master/fargate.yaml
+https://github.com/vatertime/minecraft-spot-pricing
 
 https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_ECS.html
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html

@@ -86,9 +86,5 @@ download()
     .then(run)
     .catch((err) => {
         console.log(err);
-        setTimeout(() => {
-
-            console.log(err);
-            process.exit();
-        }, 100000)
+        process.exitCode = 1;
     });
