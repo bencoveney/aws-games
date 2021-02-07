@@ -99,77 +99,12 @@
                         "FromPort": 25565,
                         "ToPort": 25565,
                         "IpProtocol": "tcp",
-                        "SourceSecurityGroupId": {"Ref": "LoadBalancerSecurityGroup"}
-                    }
-                ],
-                "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
-            }
-        },
-        "LoadBalancerSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupName": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancerSecurityGroup"]]},
-                "GroupDescription": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancerSecurityGroup"]]},
-                "SecurityGroupIngress": [
-                    {
-                        "FromPort": 25565,
-                        "ToPort": 25565,
-                        "IpProtocol": "tcp",
                         "CidrIp": "0.0.0.0/0"
                     }
                 ],
                 "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
             }
-        },
-        "TargetGroup": {
-            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-            "Properties": {
-                "HealthCheckIntervalSeconds": 10,
-                "HealthCheckPath": {"Ref": "HealthCheckPath"},
-                "HealthCheckTimeoutSeconds": 5,
-                "UnhealthyThresholdCount": 2,
-                "HealthyThresholdCount": 2,
-                "Name": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "TargetGroup"]]},
-                "Port": 25565,
-                "Protocol": "TCP",
-                "TargetType": "ip",
-                "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
-            }
-        },
-        "Listener": {
-            "Type": "AWS::ElasticLoadBalancingV2::Listener",
-            "Properties": {
-                "DefaultActions": [
-                    {
-                        "TargetGroupArn": {"Ref": "TargetGroup"},
-                        "Type": "forward"
-                    }
-                ],
-                "LoadBalancerArn": {"Ref": "LoadBalancer"},
-                "Port": 25565,
-                "Protocol": "TCP"
-            }
-        },
-        "LoadBalancer": {
-          "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-          "Properties": {
-                "LoadBalancerAttributes": [
-                    {
-                        "Key": "idle_timeout.timeout_seconds",
-                        "Value": 60
-                    }
-                ],
-                "Name": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancer"]]},
-                "Scheme": "internet-facing",
-                "SecurityGroups": [
-                    {"Ref": "LoadBalancerSecurityGroup"}
-                ],
-                "Subnets": [
-                    {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet1"}},
-                    {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet2"}}
-                ]
-            }
-        },
+        }
         "UnusedFileSystem": {
             "Type": "AWS::EFS::FileSystem",
             "Properties": {
