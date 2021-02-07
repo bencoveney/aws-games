@@ -44,6 +44,11 @@
                 "Family": {"Fn::Join": ["",[{"Ref": "ServiceName"},"EcsTaskDefinition"]]},
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
+                "PortMappings": [
+                    {
+                        "ContainerPort": 25565
+                    }
+                ],
                 "RequiresCompatibilities": ["FARGATE"]
             }
         },
@@ -76,6 +81,11 @@
                 "ServiceName": { "Ref": "ServiceName" },
                 "Cluster": { "Ref": "Cluster" },
                 "TaskDefinition": { "Ref": "TaskDefinition" },
+                "DeploymentConfiguration": {
+                    "MinimumHealthyPercent": 0,
+                    "MaximumPercent": 100
+                },
+                "DesiredCount": 1,
                 "LaunchType": "FARGATE",
                 "NetworkConfiguration": {
                     "AwsvpcConfiguration": {
