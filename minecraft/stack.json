@@ -19,17 +19,7 @@
         "Cluster": {
             "Type": "AWS::ECS::Cluster",
             "Properties": {
-                "ClusterName": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            {
-                                "Ref": "ServiceName"
-                            },
-                            "Cluster"
-                        ]
-                    ]
-                }
+                "ClusterName": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "Cluster"]]}
             }
         },
         "TaskDefinition": {
@@ -37,41 +27,21 @@
             "Properties": {
                 "ContainerDefinitions": [
                     {
-                        "Image": {
-                            "Ref": "MinecraftImage"
-                        },
+                        "Image": {"Ref": "MinecraftImage"},
                         "LogConfiguration": {
                             "LogDriver": "awslogs",
                             "Options": {
-                                "awslogs-region": {
-                                    "Ref": "AWS::Region"
-                                },
-                                "awslogs-group": {
-                                    "Ref": "LogGroup"
-                                },
+                                "awslogs-region": {"Ref": "AWS::Region"},
+                                "awslogs-group": {"Ref": "LogGroup"},
                                 "awslogs-stream-prefix": "ecs"
                             }
                         },
-                        "Name": {
-                            "Ref": "ServiceName"
-                        }
+                        "Name": {"Ref": "ServiceName"}
                     }
                 ],
                 "Cpu": "1024",
-                "ExecutionRoleArn": {
-                    "Ref": "ExecutionRole"
-                },
-                "Family": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            {
-                                "Ref": "ServiceName"
-                            },
-                            "EcsTaskDefinition"
-                        ]
-                    ]
-                },
+                "ExecutionRoleArn": {"Ref": "ExecutionRole"},
+                "Family": {"Fn::Join": ["",[{"Ref": "ServiceName"},"EcsTaskDefinition"]]},
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
                 "RequiresCompatibilities": ["FARGATE"]
@@ -80,18 +50,7 @@
         "LogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-                "LogGroupName": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            "/ecs/",
-                            {
-                                "Ref": "ServiceName"
-                            },
-                            "TaskDefinition"
-                        ]
-                    ]
-                }
+                "LogGroupName": {"Fn::Join": ["", ["/ecs/", {"Ref": "ServiceName"}, "TaskDefinition"]]}
             }
         },
         "ExecutionRole": {
@@ -108,9 +67,7 @@
                         }
                     ]
                 },
-                "ManagedPolicyArns": [
-                    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-                ]
+                "ManagedPolicyArns": ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
             }
         },
         "Service": {
@@ -127,11 +84,7 @@
                             {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet1"}},
                             {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet2"}}
                         ],
-                        "SecurityGroups": [
-                            {
-                                "Ref": "ContainerSecurityGroup"
-                            }
-                        ]
+                        "SecurityGroups": [{ "Ref": "ContainerSecurityGroup" }]
                     }
                 }
             }
@@ -139,17 +92,32 @@
         "ContainerSecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupDescription": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            {
-                                "Ref": "ServiceName"
-                            },
-                            "ContainerSecurityGroup"
-                        ]
-                    ]
-                },
+                "GroupName": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "ContainerSecurityGroup"]]},
+                "GroupDescription": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "ContainerSecurityGroup"]]},
+                "SecurityGroupIngress": [
+                    {
+                        "FromPort": 25565,
+                        "ToPort": 25565,
+                        "IpProtocol": "tcp",
+                        "SourceSecurityGroupId": {"Ref": "LoadBalancerSecurityGroup"}
+                    }
+                ],
+                "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
+            }
+        },
+        "LoadBalancerSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupName": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancerSecurityGroup"]]},
+                "GroupDescription": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "LoadBalancerSecurityGroup"]]},
+                "SecurityGroupIngress": [
+                    {
+                        "FromPort": 25565,
+                        "ToPort": 25565,
+                        "IpProtocol": "tcp",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
                 "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}}
             }
         },
