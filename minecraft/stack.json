@@ -36,7 +36,12 @@
                                 "awslogs-stream-prefix": "ecs"
                             }
                         },
-                        "Name": {"Ref": "ServiceName"}
+                        "Name": {"Ref": "ServiceName"},
+                        "PortMappings": [
+                            {
+                                "ContainerPort": 25565
+                            }
+                        ]
                     }
                 ],
                 "Cpu": "1024",
@@ -44,11 +49,6 @@
                 "Family": {"Fn::Join": ["",[{"Ref": "ServiceName"},"EcsTaskDefinition"]]},
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
-                "PortMappings": [
-                    {
-                        "ContainerPort": 25565
-                    }
-                ],
                 "RequiresCompatibilities": ["FARGATE"]
             }
         },
