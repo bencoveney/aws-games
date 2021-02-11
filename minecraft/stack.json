@@ -157,7 +157,8 @@
                         "ContainerPort": 25565,
                         "TargetGroupArn": { "Ref": "TargetGroup" }
                     }
-                ]
+                ],
+                "PlatformVersion": "1.4.0"
             }
         },
         "ContainerSecurityGroup": {
