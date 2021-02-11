@@ -22,6 +22,45 @@
                 "ClusterName": {"Fn::Join": ["", [{"Ref": "ServiceName"}, "Cluster"]]}
             }
         },
+        "Efs":{
+          "Type": "AWS::EFS::FileSystem",
+          "Properties": {}
+        },
+        "MountTargetSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-VPC"}},
+                "GroupDescription": "Security group for mount target",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "2049",
+                        "ToPort": "2049",
+                        "SourceSecurityGroupId": {"Ref": "ContainerSecurityGroup"}
+                    }
+                ]
+            }
+        },
+        "MountTarget": {
+            "Type": "AWS::EFS::MountTarget",
+            "Properties": {
+                "FileSystemId": {"Ref": "Efs"},
+                "SecurityGroups": [
+                    {"Ref": "MountTargetSecurityGroup"}
+                ],
+                "SubnetId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet1"}}
+            }
+        },
+        "MountTarget2": {
+            "Type": "AWS::EFS::MountTarget",
+            "Properties": {
+                "FileSystemId": {"Ref": "Efs"},
+                "SecurityGroups": [
+                    {"Ref": "MountTargetSecurityGroup"}
+                ],
+                "SubnetId": {"Fn::ImportValue" : {"Fn::Sub" : "${InfrastructureStackName}-PublicSubnet2"}}
+            }
+        },
         "TaskDefinition": {
             "Type": "AWS::ECS::TaskDefinition",
             "Properties": {
@@ -37,6 +76,12 @@
                             }
                         },
                         "Name": {"Ref": "ServiceName"},
+                        "MountPoints": [
+                            {
+                                "ContainerPath": "/minecraft",
+                                "SourceVolume": "minecraft-efs"
+                            }
+                        ],
                         "PortMappings": [
                             {
                                 "ContainerPort": 25565
@@ -49,7 +94,15 @@
                 "Family": {"Fn::Join": ["",[{"Ref": "ServiceName"},"EcsTaskDefinition"]]},
                 "Memory": "4096",
                 "NetworkMode": "awsvpc",
-                "RequiresCompatibilities": ["FARGATE"]
+                "RequiresCompatibilities": ["FARGATE"],
+                "Volumes": [
+                    {
+                        "EfsVolumeConfiguration": {
+                            "FileSystemId": { "Ref": "Efs" }
+                        },
+                        "Name": "minecraft-efs"
+                    }
+                ]
             }
         },
         "LogGroup": {
