@@ -80,7 +80,8 @@ function run() {
 }
 
 copyFile("./server.properties", path.resolve(serverDir, "server.properties"))
-    .then(() => copyFile("./eula.txt", path.resolve(serverDir, "eula.txt")))
+.then(() => copyFile("./eula.txt", path.resolve(serverDir, "eula.txt")))
+.then(() => copyFile("./whitelist.json", path.resolve(serverDir, "whitelist.json")))
     .then(download)
     .then(run)
     .catch((err) => {

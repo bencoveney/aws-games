@@ -19,6 +19,7 @@ RUN npm install minecraft-wrap
 
 COPY ./server.properties ./server.properties
 COPY ./eula.txt ./eula.txt
+COPY ./whitelist.json ./whitelist.json
 COPY ./wrapper.js ./wrapper.js
 RUN chmod +x ./wrapper.js
 
