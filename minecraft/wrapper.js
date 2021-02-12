@@ -18,7 +18,7 @@ const wrap = require('minecraft-wrap');
 // https://launchermeta.mojang.com/mc/game/version_manifest.json
 const version = "1.16.5";
 const jarFile = path.resolve(`server.jar`);
-const serverDir = path.resolve(".");
+const serverDir = path.resolve("./serverDir");
 
 function copyFile(from, to) {
     from = path.resolve(from);

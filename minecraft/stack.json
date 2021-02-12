@@ -78,7 +78,7 @@
                         "Name": {"Ref": "ServiceName"},
                         "MountPoints": [
                             {
-                                "ContainerPath": "/minecraft",
+                                "ContainerPath": "/minecraft/serverDir",
                                 "SourceVolume": "minecraft-efs"
                             }
                         ],
