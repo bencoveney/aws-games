@@ -79,10 +79,9 @@ function run() {
     });
 }
 
-// copyFile("/server.properties", "server.properties")
-//     .then(() => copyFile("/eula.txt", "eula.txt"))
-//     .then(download)
-download()
+copyFile("./server.properties", path.resolve(serverDir, "server.properties"))
+    .then(() => copyFile("./eula.txt", path.resolve(serverDir, "eula.txt")))
+    .then(download)
     .then(run)
     .catch((err) => {
         console.log(err);
